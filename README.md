@@ -1,70 +1,123 @@
-# Getting Started with Create React App
+# WoundSense Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+WoundSense is a web-based application designed to assist non-expert users in classifying wound types, providing care suggestions, and offering educational content on wound care. The frontend is a single-page application (SPA) built with React, ensuring a seamless and intuitive user experience. It allows users to upload wound images, view classification results with confidence scores, access educational resources, and provide feedback, all while emphasizing that the system is not a substitute for professional medical advice. The frontend communicates with a FastAPI backend running on `localhost:8000` and is optimized for simplicity (80% user priority) and low-bandwidth usage (40% user need) through image compression and lazy-loading techniques.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Image Upload and Classification**: Users can upload wound images (JPG/PNG) in the "Predict" section, which are compressed (e.g., 2 MB to 500 KB) and sent to the backend for classification.
+- **Dynamic Results Display**: Displays the predicted wound type (e.g., "cut, 75% confidence"), care suggestions, and a disclaimer ("This is not a substitute for professional medical advice").
+- **Educational Content**: The "Learn" section provides information on ten wound types, fetched from a local directory with lazy-loading for performance.
+- **Feedback Form**: Users can rate classification accuracy (1–5 scale), with submissions stored in a local SQLite database via the backend.
+- **Responsive Design**: Styled with Tailwind CSS for compatibility across devices.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Prerequisites
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Node.js**: Version 18 or higher (download from [nodejs.org](https://nodejs.org)).
+- **npm**: Comes with Node.js, used for package management.
+- **Backend Server**: Ensure the FastAPI backend is running on `http://localhost:8000` (refer to the backend README for setup).
 
-### `npm test`
+## Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/<your-repo>/woundsense.git
+   cd woundsense/frontend
+   ```
 
-### `npm run build`
+2. **Install Dependencies**:
+   ```bash
+   npm install
+   ```
+   This installs React, React Router, Axios, Tailwind CSS, and other dependencies listed in `package.json`.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. **Configure Environment**:
+   - Ensure the backend API URL (`http://localhost:8000`) is correctly set in the frontend configuration (e.g., in a `.env` file or directly in the Axios setup).
+   - Example `.env`:
+     ```
+     REACT_APP_API_URL=http://localhost:8000
+     ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Running the Application
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. **Start the Development Server**:
+   ```bash
+   npm start
+   ```
+   This runs the frontend on `http://localhost:3000` by default.
 
-### `npm run eject`
+2. **Access the Application**:
+   - Open your browser and navigate to `http://localhost:3000`.
+   - Ensure the backend is running to enable API requests (e.g., for predictions and feedback submission).
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Project Structure
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+frontend/
+├── public/
+│   ├── index.html        # Main HTML file
+│   └── static/           # Static assets (e.g., educational content images)
+├── src/
+│   ├── components/       # Reusable React components (e.g., ImageUpload, ResultCard)
+│   ├── pages/            # Page components (e.g., Predict, Learn, About)
+│   ├── App.js            # Main App component with React Router setup
+│   ├── index.js          # Entry point for React
+│   └── styles/           # Tailwind CSS and custom styles
+├── package.json          # Dependencies and scripts
+└── README.md             # This file
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Usage
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **Predict Section**: Navigate to the "Predict" tab, upload a wound image (JPG/PNG), and view the classification result, confidence score, care suggestion, and disclaimer.
+- **Learn Section**: Access the "Learn" tab to read educational content about the ten wound types (e.g., abrasions, diabetic wounds).
+- **Feedback**: Use the feedback form to rate the classification accuracy, helping improve the system.
+- **Responsive Design**: The application is optimized for both desktop and mobile devices, ensuring accessibility.
 
-## Learn More
+## Development Notes
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **React Router**: Used for client-side routing to maintain the SPA design, enabling navigation without full page reloads.
+- **Axios**: Handles API requests to the FastAPI backend (e.g., `/predict` for classifications, `/feedback` for submissions).
+- **Image Compression**: Utilizes `browser-image-compression` to reduce image sizes before upload, supporting low-bandwidth users.
+- **Lazy-Loading**: Educational content images are lazy-loaded to improve performance, especially for users with slower connections.
+- **Tailwind CSS**: Provides responsive styling, ensuring a consistent look across devices.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Troubleshooting
 
-### Code Splitting
+- **Backend Not Responding**:
+  - Ensure the FastAPI backend is running on `http://localhost:8000`.
+  - Check the API URL in the frontend configuration.
+- **CORS Issues**:
+  - Verify that the backend has CORS middleware enabled for `http://localhost:3000`.
+- **Image Upload Fails**:
+  - Confirm the uploaded file is a valid JPG/PNG and under the size limit (e.g., 5 MB after compression).
+- **Slow Performance**:
+  - Check for network issues or large image sizes; the compression should reduce file sizes to ~500 KB.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Future Improvements
 
-### Analyzing the Bundle Size
+- **Cloud Deployment**: Transition to a cloud-based frontend to improve scalability and accessibility.
+- **Multilingual Support**: Add language options to the educational content for broader user reach.
+- **Enhanced Feedback**: Include more detailed feedback forms to gather specific user insights.
+- **Video Tutorials**: Integrate video content in the "Learn" section to enhance educational resources.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Contributing
 
-### Making a Progressive Web App
+Contributions are welcome! To contribute:
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/your-feature`).
+3. Make your changes and commit (`git commit -m "Add your feature"`).
+4. Push to your branch (`git push origin feature/your-feature`).
+5. Open a pull request with a detailed description of your changes.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## License
 
-### Advanced Configuration
+This project is licensed under the MIT License. See the `LICENSE` file for details.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Contact
 
-### Deployment
+For questions or support, contact the development team at `mdweerasiri@gmail.com`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
